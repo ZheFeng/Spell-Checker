@@ -1,9 +1,6 @@
 
 exports.BloomFilter = BloomFilter;
-exports.fnv_1a = fnv_1a;
-exports.fnv_1a_b = fnv_1a_b;
 
-var typedArrays = typeof ArrayBuffer !== "undefined";
 
 // Creates a new bloom filter.  If *m* is an array-like object, with a length
 // property, then the bloom filter is loaded with data from the array, where
@@ -11,27 +8,16 @@ var typedArrays = typeof ArrayBuffer !== "undefined";
 // number of bits.  Note that *m* is rounded up to the nearest multiple of
 // 32.  *k* specifies the number of hashing functions.
 function BloomFilter(m, k) {
-  var a;
-  if (typeof m !== "number") a = m, m = a.length * 32;
-
   var n = Math.ceil(m / 32),
       i = -1;
   this.m = m = n * 32;
   this.k = k;
 
-  if (typedArrays) {
-    var kbytes = 1 << Math.ceil(Math.log(Math.ceil(Math.log(m) / Math.LN2 / 8)) / Math.LN2),
-        array = kbytes === 1 ? Uint8Array : kbytes === 2 ? Uint16Array : Uint32Array,
-        kbuffer = new ArrayBuffer(kbytes * k),
-        buckets = this.buckets = new Int32Array(n);
-    if (a) while (++i < n) buckets[i] = a[i];
-    this._locations = new array(kbuffer);
-  } else {
-    var buckets = this.buckets = [];
-    if (a) while (++i < n) buckets[i] = a[i];
-    else while (++i < n) buckets[i] = 0;
-    this._locations = [];
-  }
+  var kbytes = 1 << Math.ceil(Math.log(Math.ceil(Math.log(m) / Math.LN2 / 8)) / Math.LN2),
+      array = kbytes === 1 ? Uint8Array : kbytes === 2 ? Uint16Array : Uint32Array,
+      kbuffer = new ArrayBuffer(kbytes * k),
+      buckets = this.buckets = new Int32Array(n);
+  this._locations = new array(kbuffer);
 }
 
 // See http://willwhim.wordpress.com/2011/09/03/producing-n-hash-functions-by-hashing-only-once/

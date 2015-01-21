@@ -16,7 +16,7 @@ console.log(words.length + " words loaded.")
 
 var hashes = 16
 var bits = words.length * hashes;
-
+bits = Math.ceil(bits / 32) * 32;
 
 console.log("number of hash functions: ", hashes)
 console.log("number of bits to allocate: ", bits)
