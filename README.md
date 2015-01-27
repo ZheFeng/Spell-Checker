@@ -3,7 +3,7 @@
 npm install
 npm test
 ```
-The output will be words count, bits number, hash function number and bloonfilter result
+The output will be
 ```
 > SpellChecker@1.0.0 test /Users/zhefeng/development/myob/SpellChecker
 > mocha test/*Test.js
